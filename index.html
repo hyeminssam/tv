@@ -50,9 +50,6 @@ button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px soli
 .btn.warn{border-color:var(--gold);color:var(--gold);background:transparent}
 .btn.ghost{background:transparent}
 .btn.primary{background:var(--berry);border-color:var(--berry);color:var(--snow)}
-.pwbox{display:flex;flex-direction:column;gap:12px;align-items:stretch;width:min(560px,100%)}
-.pwbox label{color:var(--frost)}
-.pwbox input[type=password]{min-height:76px;border-radius:16px;border:2px solid var(--needle);background:var(--pine-deep);
   padding:0 22px;font-size:1.3em;letter-spacing:.1em}
 #startMsg{min-height:1.4em;color:var(--frost);margin:0}
 #startMsg.err{color:#ff8d96}
@@ -69,7 +66,6 @@ body.pos-corner #show, body.pos-hide #show{grid-template-columns:1fr}
   object-fit:contain;opacity:0;transition:opacity .9s ease;user-select:none;-webkit-user-drag:none;pointer-events:none;
   filter:drop-shadow(0 18px 40px rgba(0,0,0,.45))}
 #stage img.show{opacity:1}
-#slideBar{position:absolute;left:0;bottom:0;height:5px;width:0;background:var(--gold);opacity:.8}
 #kindTag{position:absolute;left:var(--pad);top:var(--pad);padding:8px 18px;border-radius:99px;background:var(--berry);font-size:.9em}
 #emptyMsg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;
   color:var(--frost);font-size:1.4em;padding:30px;line-height:1.6;word-break:keep-all}
@@ -82,17 +78,18 @@ body.pos-corner #show, body.pos-hide #show{grid-template-columns:1fr}
   box-shadow:inset 1px 0 0 rgba(255,255,255,.06)}
 body.pos-corner #side, body.pos-hide #side{display:none}
 .tLabel{font-size:clamp(22px,1.9vw,34px);color:var(--frost);text-align:center;line-height:1.3;word-break:keep-all}
-.cup{width:auto;height:clamp(180px,34vh,400px);display:block;overflow:visible;margin-top:clamp(4px,1vh,14px)}
+.cup{width:auto;height:clamp(150px,27vh,340px);display:block;overflow:visible;margin-top:clamp(4px,1vh,14px)}
 .cup .fill{transition:transform 1s linear}
 .cup .ice{fill:var(--ice);transition:fill .6s}
 .cup .syrup{fill:var(--berry)}
 .tDigits{font-family:var(--num);font-weight:800;font-variant-numeric:tabular-nums lining-nums;text-align:center;line-height:1;
-  font-size:clamp(64px,7.4vw,150px);letter-spacing:-.02em;font-optical-sizing:auto}
+  font-size:clamp(60px,6.8vw,136px);letter-spacing:-.02em;font-optical-sizing:auto}
 .tDigits.hh{font-size:clamp(50px,5.6vw,116px)}
 .tBar{height:12px;border-radius:99px;background:var(--pine-deep);overflow:hidden;width:100%}
 .tBar i{display:block;height:100%;width:100%;background:var(--ice);transition:width 1s linear,background .4s}
 .tEnd{text-align:center;color:var(--frost);font-size:1em;min-height:1.3em}
-.tState{text-align:center;min-height:1.3em;color:var(--gold)}
+.tState{text-align:center;color:var(--gold)}
+.tState:empty{display:none}
 .t-warn .tDigits{color:var(--gold)} .t-warn .tBar i{background:var(--gold)} .t-warn .ice{fill:#f0d9a0}
 .t-last .tDigits{color:#ff7b86} .t-last .tBar i{background:var(--berry)} .t-last .ice{fill:#f39aa3}
 .t-last .tDigits{animation:beat 1s infinite}
@@ -101,9 +98,12 @@ body.pos-corner #side, body.pos-hide #side{display:none}
 @keyframes blink{50%{opacity:.3}}
 @media (prefers-reduced-motion:reduce){.t-last .tDigits,.t-done .tDigits{animation:none}}
 .sideInfo{margin-top:auto;width:100%;display:flex;flex-direction:column;gap:10px}
-.clock{display:flex;justify-content:space-between;align-items:baseline;padding-top:12px;border-top:1px solid rgba(241,245,242,.14)}
-.clock b{font-family:var(--num);font-weight:600;font-size:clamp(28px,2.4vw,44px);font-variant-numeric:tabular-nums lining-nums;color:var(--gold)}
-.clock span,#count{color:var(--frost)}
+.clock{width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;padding-top:clamp(8px,1.4vh,16px);border-top:1px solid rgba(241,245,242,.14)}
+.cLbl{color:var(--frost);font-size:.95em}
+.cTime{display:flex;align-items:baseline;justify-content:center;gap:.35em;flex-wrap:wrap}
+.cTime b{font-weight:400;font-size:clamp(44px,4.2vw,84px);line-height:1.1;color:var(--gold);white-space:nowrap;font-variant-numeric:tabular-nums lining-nums}
+#ampm{color:var(--gold);font-size:clamp(22px,1.8vw,34px)}
+#count{color:var(--frost)}
 #count{text-align:right;font-size:.9em}
 #musicSpace{width:100%;aspect-ratio:16/9;flex:none}
 body.pos-corner #musicSpace, body.pos-hide #musicSpace{display:none}
@@ -217,12 +217,6 @@ body.no-music #musicBox, body.no-music #musicSpace{display:none}
   <h1 id="title">포스터 슬라이드쇼</h1>
   <p class="sub">학생들이 만든 포스터를 차례로 넘겨 보여 주고, 체험 시간을 함께 재요.</p>
 
-  <div class="pwbox" id="pwBox" hidden>
-    <label for="pw">슬라이드쇼 비밀번호</label>
-    <input id="pw" type="password" autocomplete="off" placeholder="비밀번호">
-    <label style="display:flex;gap:10px;align-items:center;color:var(--muted)"><input type="checkbox" id="pwKeep" checked style="width:28px;height:28px"> 이 전자칠판에 기억하기</label>
-    <button class="btn primary" id="pwGo">확인</button>
-  </div>
 
   <div class="loadbar" id="loadBar" hidden><i></i></div>
   <p id="startMsg"></p>
@@ -243,7 +237,6 @@ body.no-music #musicBox, body.no-music #musicSpace{display:none}
     <img id="imgA" alt="포스터"><img id="imgB" alt="포스터">
     <div id="emptyMsg" hidden></div>
     <div id="kindTag" hidden></div>
-    <div id="slideBar"></div>
     <div id="hint">화면을 누르면 조작 버튼, 타이머를 누르면 시간 바꾸기</div>
   </div>
   <aside id="side">
@@ -271,8 +264,8 @@ body.no-music #musicBox, body.no-music #musicSpace{display:none}
       <div class="tEnd tE"></div>
       <div class="tState tS"></div>
     </div>
+    <div class="clock"><span class="cLbl">지금 시각</span><div class="cTime"><b id="clock">--시 --분</b><span id="ampm"></span></div></div>
     <div class="sideInfo">
-      <div class="clock"><span>지금 시각</span><b id="clock">--:--</b></div>
       <div id="count"></div>
       <div id="musicSpace"></div>
       <div id="songTitle"></div>
@@ -441,8 +434,7 @@ body.no-music #musicBox, body.no-music #musicSpace{display:none}
 
     <h3>이 전자칠판</h3>
     <div class="sec">
-      <div class="chips"><button class="btn warn" id="forgetPw">🔑 이 기기에 기억한 비밀번호 지우기</button></div>
-      <span class="small">설정을 저장하면 학교 구글 드라이브(Apps Script)에도 저장돼서, 노트북에서 미리 정해 두면 전자칠판에서 그대로 불러와요.</span>
+      <span class="small">설정은 이 전자칠판(브라우저)에만 저장돼요. 다른 사람이 주소로 들어와도 이 전자칠판의 음악·설정은 바뀌지 않아요.</span>
     </div>
 
     <div class="foot">
@@ -464,7 +456,7 @@ const GAS = String(CFG.APPS_SCRIPT_URL || "").trim();
 const KIND_ORDER = ["전자칠판용","활동 소개","출입문용","동아리 소개","기타"];
 const DEF = { sec:10, order:"upload", kinds:[], timerMode:"minutes", timerMin:20, timerSec:0, untilTime:"",
   repeat:false, timerPos:"side", timerLabel:"", beep:true, music:[], shuffleMusic:false, volume:40, showKind:false };
-const LS_PW = "posterShow.pw", LS_SET = "posterShow.settings";
+const LS_SET = "posterShow.settings";
 
 const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
@@ -476,7 +468,6 @@ const sget = k => { try { return localStorage.getItem(k); } catch(e){ return mem
 const sset = (k,v) => { try { localStorage.setItem(k,v); } catch(e){ mem[k] = v; } };
 const sdel = k => { try { localStorage.removeItem(k); } catch(e){} delete mem[k]; };
 
-let pw = sget(LS_PW) || "";
 let S = Object.assign({}, DEF, safeJSON(sget(LS_SET)) || {});
 function safeJSON(t){ try { return t ? JSON.parse(t) : null; } catch(e){ return null; } }
 
@@ -489,10 +480,10 @@ function startMsg(msg, err){ const m = $("#startMsg"); m.textContent = msg || ""
 async function api(action, extra){
   if (!GAS) throw new Error("config.js에 Apps Script 주소(APPS_SCRIPT_URL)를 먼저 넣어 주세요.");
   let r;
-  try { r = await fetch(GAS, { method:"POST", body: JSON.stringify(Object.assign({ action, pw }, extra || {})) }); }
+  try { r = await fetch(GAS, { method:"POST", body: JSON.stringify(Object.assign({ action }, extra || {})) }); }
   catch(e){ throw new Error("포스터 서버에 연결하지 못했어요. 인터넷 연결을 확인해 주세요."); }
   let j; try { j = await r.json(); } catch(e){ throw new Error("서버 응답을 읽지 못했어요. (Apps Script 배포 설정 확인)"); }
-  if (!j.ok) { const e = new Error(j.error || "문제가 생겼어요."); e.pw = /비밀번호/.test(j.error || ""); throw e; }
+  if (!j.ok) throw new Error(j.error || "문제가 생겼어요.");
   return j;
 }
 
@@ -524,7 +515,7 @@ async function loadPosters(silent){
         try {
           const im = await api("image", { id:p.id });
           urls.set(p.id, URL.createObjectURL(b64Blob(im.data, im.mime)));
-        } catch(e){ if (e.pw) throw e; console.warn("포스터 하나 실패", e); }
+        } catch(e){ console.warn("포스터 하나 실패", e); }
         done++; step();
         if (showing && !cur) buildOrder(true);
       }
@@ -667,7 +658,10 @@ function timerAdd(ms){
   const m = Math.abs(ms) >= 60000 ? Math.abs(ms) / 60000 + "분" : Math.abs(ms) / 1000 + "초";
   toast(m + (ms > 0 ? " 더했어요" : " 뺐어요") + (T.running ? " · " + hm(T.endAt) + "에 끝나요" : ""));
 }
-function hm(t){ const e = new Date(t); return pad2(e.getHours()) + ":" + pad2(e.getMinutes()) + (e.getSeconds() ? ":" + pad2(e.getSeconds()) : ""); }
+const ampm = h => h < 12 ? "오전" : "오후";
+const k12 = (h, m) => (h % 12 || 12) + "시 " + pad2(m) + "분";
+function hm(t){ const e = new Date(t); return ampm(e.getHours()) + " " + k12(e.getHours(), e.getMinutes()); }
+function hmStr(v){ const m = /^(\d{1,2}):(\d{2})$/.exec(v || ""); return m ? ampm(+m[1]) + " " + k12(+m[1], +m[2]) : v; }
 function hideDone(){ clearTimeout(doneShown); $("#doneOv").hidden = true; }
 function startMinutes(min){                                    // 새 타이머 바로 시작 (진행 중이어도)
   S.timerMode = "minutes"; S.timerMin = min; S.timerSec = 0; sset(LS_SET, JSON.stringify(S));
@@ -682,10 +676,7 @@ function tick(){
     const end = untilDate(S.untilTime); T.total = T.remain = end ? end - Date.now() : 0; T.ready = T.total > 0;
   }
   renderTimer();
-  const now = new Date(); $("#clock").textContent = pad2(now.getHours()) + ":" + pad2(now.getMinutes());
-  // 다음 포스터까지 막대
-  const sb = $("#slideBar");
-  sb.style.width = (slidePlay && order.length > 1 ? Math.min(100, (Date.now() - slideStart) / (S.sec * 1000) * 100) : 0) + "%";
+  const now = new Date(); $("#clock").textContent = k12(now.getHours(), now.getMinutes()); $("#ampm").textContent = "(" + ampm(now.getHours()) + ")";
 }
 function timerFinish(){
   T.running = false; T.done = true; T.remain = 0;
@@ -703,8 +694,8 @@ function renderTimer(){
   const cls = T.done ? "t-done" : !T.running && !T.started ? "t-idle" : r <= 10000 ? "t-last" : r <= 60000 ? "t-warn" : "";
   const label = S.timerLabel || "남은 시간";
   let end = "";
-  if (T.running) { const e = new Date(T.endAt); end = pad2(e.getHours()) + ":" + pad2(e.getMinutes()) + (e.getSeconds() ? ":" + pad2(e.getSeconds()) : "") + "에 끝나요"; }
-  else if (S.timerMode === "until" && S.untilTime) end = S.untilTime + "까지";
+  if (T.running) end = hm(T.endAt) + "에 끝나요";
+  else if (S.timerMode === "until" && S.untilTime && !T.started) end = hmStr(S.untilTime) + "까지";
   const state = T.done ? "시간 끝!" : T.running ? "" : !T.ready ? "여기를 눌러 시간을 정해요" : !T.started ? "시작 전" : "잠깐 멈춤";
   $$(".tbox").forEach(b => {
     b.className = "tbox " + cls + (b.id === "cornerT" ? "" : "");
@@ -912,37 +903,27 @@ async function init(){
   $("#cy").textContent = new Date().getFullYear();
   timerFromSettings(); buildQueue();
   if (!GAS) { startMsg("config.js에 Apps Script 주소를 먼저 넣어 주세요.", true); return; }
-  if (!pw) { $("#pwBox").hidden = false; $("#pw").focus(); return; }
   await connect();
 }
 async function connect(){
   $("#goBtn").disabled = true;
   try {
-    startMsg("설정 불러오는 중…");
-    const j = await api("getSettings");
-    if (j.settings) { S = Object.assign({}, DEF, j.settings); sset(LS_SET, JSON.stringify(S)); }
+    startMsg("포스터 불러오는 중…");
     timerFromSettings(); buildQueue(); applyPos();
     if (queue.length) loadYTApi();                           // 미리 준비해 두면 시작 버튼에서 바로 재생
-    $("#pwBox").hidden = true;
     await loadPosters(false);
     $("#goBtn").disabled = false;
     updateStartInfo();
   } catch(e){
-    if (e.pw) { pw = ""; sdel(LS_PW); $("#pwBox").hidden = false; }
+    setTimeout(connect, 15000);                                // 인터넷이 잠깐 끊겼으면 다시 시도
     startMsg(e.message, true);
   }
 }
 function updateStartInfo(){
   const v = visible().length;
-  const t = S.timerMode === "until" ? (S.untilTime ? S.untilTime + "까지" : "시간 안 정함") : S.timerMin + "분" + (S.timerSec ? " " + S.timerSec + "초" : "");
+  const t = S.timerMode === "until" ? (S.untilTime ? hmStr(S.untilTime) + "까지" : "시간 안 정함") : S.timerMin + "분" + (S.timerSec ? " " + S.timerSec + "초" : "");
   $("#startInfo").textContent = "포스터 " + v + "장 · " + S.sec + "초마다 넘김 · 타이머 " + t + " · 음악 " + (queue.length ? queue.length + "개" : "없음");
 }
-$("#pwGo").addEventListener("click", () => {
-  const v = $("#pw").value.trim(); if (!v) { startMsg("비밀번호를 넣어 주세요.", true); return; }
-  pw = v; if ($("#pwKeep").checked) sset(LS_PW, v);
-  $("#pw").value = ""; connect();
-});
-$("#pw").addEventListener("keydown", e => { if (e.key === "Enter") $("#pwGo").click(); });
 $("#goBtn").addEventListener("click", begin);
 
 /* ---------- 막대 버튼 ---------- */
@@ -994,7 +975,7 @@ function openTimer(){
   let base = new Date(now); base.setSeconds(0,0); base.setMinutes(Math.ceil((now.getMinutes() + 1) / 10) * 10);
   for (let i = 0; i < 6; i++) {
     const d = new Date(base.getTime() + i * 10 * 60000), hm = pad2(d.getHours()) + ":" + pad2(d.getMinutes());
-    const b = document.createElement("button"); b.className = "chip"; b.textContent = hm;
+    const b = document.createElement("button"); b.className = "chip"; b.textContent = hmStr(hm); b.dataset.v = hm;
     b.onclick = () => { tDraft.untilTime = hm; renderTDraft(); }; $("#untilPresets").appendChild(b);
   }
   $("#tmLabel").value = tDraft.timerLabel;
@@ -1005,7 +986,7 @@ function renderTDraft(){
   $("#tmMin").hidden = tDraft.timerMode !== "minutes"; $("#tmUntil").hidden = tDraft.timerMode !== "until";
   $("#tmVal").textContent = pad2(tDraft.timerMin) + ":" + pad2(tDraft.timerSec);
   $$("#tmPresets .chip").forEach(b => b.classList.toggle("on", b.textContent === tDraft.timerMin + "분" && !tDraft.timerSec));
-  $$("#untilPresets .chip").forEach(b => b.classList.toggle("on", b.textContent === tDraft.untilTime));
+  $$("#untilPresets .chip").forEach(b => b.classList.toggle("on", b.dataset.v === tDraft.untilTime));
   $("#tmTime").value = tDraft.untilTime;
   $("#tmRepeat").classList.toggle("on", tDraft.repeat);
   $("#tmBeep").classList.toggle("on", tDraft.beep);
@@ -1075,7 +1056,6 @@ $("#showKindChip").onclick = () => { sDraft.showKind = !sDraft.showKind; renderS
 $("#shuffleChip").onclick = () => { sDraft.shuffleMusic = !sDraft.shuffleMusic; renderSDraft(); };
 $("#volRange").oninput = e => { sDraft.volume = Number(e.target.value); $("#volVal").textContent = sDraft.volume; };
 $("#reloadBtn").onclick = async () => { toast("포스터를 새로 불러오는 중…"); try { await loadPosters(true); renderSDraft(); toast("포스터 " + all.filter(p => urls.has(p.id)).length + "장 불러왔어요."); } catch(e){ toast(e.message, 3500); } };
-$("#forgetPw").onclick = () => { sdel(LS_PW); toast("이 기기에서 비밀번호를 지웠어요. 다음에 열 때 다시 물어봐요.", 3200); };
 $("#sCancel").onclick = () => { $("#sOv").hidden = true; sDraft = null; };
 $("#sSave").onclick = async () => {
   const lines = $("#musicTxt").value.split(/\n+/).map(s => s.trim()).filter(Boolean);
@@ -1090,8 +1070,7 @@ $("#sSave").onclick = async () => {
   if (showing) { buildOrder(true); if (!cur) buildOrder(false); restartSlideTimer(); $("#kindTag").hidden = !S.showKind || !cur; }
   if (musicChanged) { buildQueue(); if (showing && queue.length) { if (ytReady) playItem(); else startMusic(); } else if (!queue.length && ytReady) yt.stopVideo(); }
   updateStartInfo();
-  try { const j = await api("saveSettings", { settings:S }); S = Object.assign({}, DEF, j.settings); sset(LS_SET, JSON.stringify(S)); toast("저장했어요. 다른 기기에서도 이 설정으로 열려요."); }
-  catch(e){ toast("이 전자칠판에만 저장했어요. (" + e.message + ")", 4000); }
+  toast("저장했어요.");
 };
 
 /* ---------- 눈 내리기 (가볍게, 움직임 줄이기 설정이면 멈춤) ---------- */
@@ -1143,7 +1122,7 @@ setInterval(() => { if (!$("#qOv").hidden) renderQuick(); }, 500);
 
 /* ---------- 반복 작업 ---------- */
 setInterval(tick, 250);
-setInterval(() => { if (showing && pw) loadPosters(true).catch(() => {}); }, 3 * 60 * 1000);
+setInterval(() => { if (showing) loadPosters(true).catch(() => {}); }, 3 * 60 * 1000);
 window.addEventListener("resize", () => setTimeout(placeMusic, 200));
 
 init();
